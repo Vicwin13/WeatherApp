@@ -27,6 +27,7 @@ function Head() {
 
   const answer = () => {
     setHumidity(weatherData.main.humidity);
+    ("Pls let this work");
     // setWind(weatherData.wind.speed);
     // setVisibility(weatherData.visibility);
     // setPressure(weatherData.main.pressure);
