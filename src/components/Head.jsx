@@ -8,7 +8,6 @@ function Head() {
   const [city, setCity] = useState("");
   const [humidity, setHumidity] = useState("");
   const [wind, setWind] = useState("");
-  // const [index, setIndex] = useState("");
   const [visibility, setVisibility] = useState("");
   const [pressure, setPressure] = useState("");
 
