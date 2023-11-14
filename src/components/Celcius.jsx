@@ -1,12 +1,10 @@
 
-export default function Celsius(value) {
+export default function Celsius({ value }) {
 
-    const convert = ( fah ) =>{
+    const convert = ( value) =>{
 
-        let cel = (fah - 32) * (5/9);
-        return(
-            `${cel} %`
-        );
+        let cel = (value - 32) * (5/9);
+        return cel;
 
     }
   return (

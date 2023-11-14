@@ -3,7 +3,13 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import background from "../assets/bggg.jpg"
 import Widget from "./Widget";
-// import Widget from "./Widget";
+import snow from '../assets/snow.png'
+import standard from "../assets/sunny (1).png"
+import cloudy from "../assets/cloudy.png"
+import clear from "../assets/clear-sky.png"
+import rainy from "../assets/rainy-day.png"
+import sunny from "../assets/sunny.png"
+
 function Head() {
   const apiKey = "0f7ccf743853d94ac08d56cefbe74d7d";
   const [weatherData, setWeatherData] = useState({});
@@ -12,12 +18,26 @@ function Head() {
   const [wind, setWind] = useState("");
   const [visibility, setVisibility] = useState("");
   const [pressure, setPressure] = useState("");
+  const [feelsLike, setFeelsLike]= useState('');
   const [loading, setLoading] = useState(false);
-
+  const [weatherImage, setWeatherImage] = useState(null)
 
   useEffect(()=>{
     answer()
+    convert()
+    setWeatherImage(getWeatherImage(weatherData?.weather?.[0]?.main))
   },[weatherData])
+
+  const getWeatherImage =(conditions) =>{
+    switch(conditions){
+      case "Clear": return clear;
+      case "Clouds": return cloudy;
+      case "Rain": return rainy;
+      case "Sunny" : return sunny;
+      case "Snow" : return snow;
+      default: return standard;
+  }
+}
 
   const getWeather = async (event) => {
     event.preventDefault();
@@ -44,21 +64,33 @@ function Head() {
     setWind(weatherData?.wind?.speed);
     setVisibility(weatherData?.visibility);
     setPressure(weatherData?.main?.pressure);
+    setFeelsLike(weatherData?.main?.feels_like)
+  
   };
 
+
+  const convert = () =>{
+
+    let val = weatherData?.main?.temp
+
+    let cel = (val - 32) * (5/9);
+     return cel.toFixed(2);
+
+
+}
   
 
 
   return (
        <>
-      <div 
-      style={{
-      backgroundImage : `url(${background})`, 
-      backgroundPosition: 'center', 
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover'
+          <div 
+          style={{
+          backgroundImage : `url(${background})`, 
+          backgroundPosition: 'center', 
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover'
     }} 
-      className=" h-screen ">
+      className=" h-full ">
         <div className="grid place-items-center w-3/4 m-auto py-8">
           <div className="flex justify-center gap-4 items-center">
           
@@ -84,18 +116,31 @@ function Head() {
 
           {loading && <p>Loading...</p>}
 
-          <div className=" text-[rgb(235,235,235)]  shadow-3xl px-2 py-6  w-full rounded-xl mt-8">
+          <div className=" text-[rgb(235,235,235)]  shadow-3xl px-4 py-6  w-full rounded-xl mt-8">
             <div className="pb-4">
               <p className="text-4xl font-bold ">{weatherData?.name}  </p>
             </div>
-            <div className="flex gap-4 w-fit  items-center ">
-              <p className="text-xl font-semibold">
-                
-              <span className="text-[rgb(215,255,0)] text-4xl"> {weatherData?.main?.temp} </span> &deg;F
+            <div className="flex justify-between gap-4  items-center ">
+              
+            <div>
+              <p className="text-xl font-semibold">                
+                <span className="text-[rgb(215,255,0)] text-2xl"> {weatherData?.main?.temp} </span> &deg;F
               </p>
               <p className="text-xl font-semibold">
-                {weatherData?.weather?.[0]?.main} 
+              <span className="text-[rgb(255,166,0)] text-2xl"> {  weatherData?.main?.temp && convert()} </span> &deg;C
+              </p>    
+              
+              <p className="text-xl font-semibold">
+                {weatherData?.weather?.[0]?.main}
+
               </p>
+              </div>
+              <span>{weatherData?.weather?.[0]?.description}</span>
+              <img
+              src={weatherImage}
+              alt="Weather Image"
+              style={{ width: "80px", height: "80px" }}
+            />
             </div>
           </div>
 
@@ -105,6 +150,7 @@ function Head() {
               weather2={wind}
               weather3 = {visibility}
               weather4 = {pressure}
+              weather5 = {feelsLike}
                />
               <Widget/>
           </div>
